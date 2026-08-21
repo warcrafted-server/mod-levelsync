@@ -34,6 +34,18 @@ static std::string FormatMoneyString(uint32 copper)
     return out;
 }
 
+// -------------------------------------------------------------------
+// Reserved string range: 100006 - 100009.
+// (100009 is left free as a spare for future auto-sync notifications.)
+// The command/chat strings (LevelSyncCommands.cpp) begin at 100010.
+// -------------------------------------------------------------------
+enum LevelSyncStrings
+{
+    LANG_LEVELSYNC_LEVEL_UPDATED = 100006,
+    LANG_LEVELSYNC_IP_UPDATED    = 100007,
+    LANG_LEVELSYNC_MONEY_POOLED  = 100008,
+};
+
 LevelSyncMgr* LevelSyncMgr::instance()
 {
     static LevelSyncMgr inst;
@@ -191,7 +203,7 @@ std::vector<LevelSyncMgr::GroupLevelMember> LevelSyncMgr::LoadGroupLevelMembers(
         // Overlay live in-memory state for online characters. The DB row
         // only persists on the next save tick or logout, so reading c.level
         // / c.xp directly can lag behind reality (e.g. a GM bumps a bot to
-        // level 10 via .character level — DB still shows the old level
+        // level 10 via .character level â€” DB still shows the old level
         // until next save). Sync paths that consume this snapshot need to
         // see the truth, otherwise they compute "highest" against stale
         // data and skip propagation.
@@ -225,9 +237,7 @@ void LevelSyncMgr::ApplyLevelToOnline(Player* target, uint8 newLevel)
     target->SetUInt32Value(PLAYER_XP, 0);
     _syncing = false;
 
-    ChatHandler(target->GetSession()).PSendSysMessage(
-        "|cff00ff00[LevelSync]|r Your level has been updated to {} by the group sync.",
-        newLevel);
+    ChatHandler(target->GetSession()).SendSysMessage(LANG_LEVELSYNC_LEVEL_UPDATED, newLevel);
 }
 
 void LevelSyncMgr::BatchUpdateOfflineLevel(const std::vector<uint32>& guids, uint8 newLevel, uint8 minCurrentLevel)
@@ -341,7 +351,7 @@ void LevelSyncMgr::SyncGroupOnLogin(Player* player)
 
     // After any pull-up, find the highest XP at the player's current level
     // and bump the player up to match. Online members' XP is read live;
-    // offline members' XP is read from the snapshot. Same-level only —
+    // offline members' XP is read from the snapshot. Same-level only â€”
     // cross-level comparison is moot because the player's at the highest
     // level after the pull-up step.
     uint32 myXP = player->GetUInt32Value(PLAYER_XP);
@@ -489,7 +499,7 @@ void LevelSyncMgr::SyncGroupOnLevelToggle(uint32 groupId)
         BatchUpdateOfflineLevel(offlineGuids, offlineHighest);
 
     // Sync XP at each effective ceiling. With DK exception OFF, non-DKs cap
-    // at highestNonDK while DKs cap at highestAll — the two ceilings can
+    // at highestNonDK while DKs cap at highestAll â€” the two ceilings can
     // differ (e.g. non-DKs at level 2 alongside level-55 DKs). A single XP
     // search at highestAll would miss the non-DK tier entirely. So run the
     // XP push at each ceiling level present in the group, deduplicating if
@@ -526,7 +536,7 @@ void LevelSyncMgr::SyncGroupOnLevelToggle(uint32 groupId)
             }
         }
         // BatchUpdateOfflineXP filters server-side by level == ceiling AND
-        // xp < topXP, so passing all offline guids is safe — only the ones
+        // xp < topXP, so passing all offline guids is safe â€” only the ones
         // actually at this ceiling with less XP will be touched.
         BatchUpdateOfflineXP(xpOfflineGuids, ceiling, topXP);
     };
@@ -654,9 +664,7 @@ void LevelSyncMgr::ApplyIPTierToOnline(Player* target, uint8 newTier)
 
     _syncingIP = false;
 
-    ChatHandler(target->GetSession()).PSendSysMessage(
-        "|cff00ff00[LevelSync]|r Your progression tier has been updated to {} by the group sync.",
-        newTier);
+    ChatHandler(target->GetSession()).SendSysMessage(LANG_LEVELSYNC_IP_UPDATED, newTier);
 }
 
 void LevelSyncMgr::BatchUpdateOfflineIPTier(const std::vector<uint32>& guids, uint8 newTier, uint8 minTier)
@@ -995,7 +1003,7 @@ LevelSyncMgr::PoolResult LevelSyncMgr::PoolGroupMoney(Player* caller, uint32 gro
 
     // Drain online members first via SetMoney(0). PLAYER_FIELD_COINAGE is a
     // dirty-flagged UpdateField, so the client wallet refreshes within a
-    // tick — same path vendors and mail use. Re-read GetMoney() inside the
+    // tick â€” same path vendors and mail use. Re-read GetMoney() inside the
     // loop in case the live value shifted between snapshot and drain.
     uint64 actualDrained = 0;
     std::vector<uint32> offlineGuids;
@@ -1018,11 +1026,7 @@ LevelSyncMgr::PoolResult LevelSyncMgr::PoolGroupMoney(Player* caller, uint32 gro
         actualDrained += amt;
         ++out.contributors;
 
-        ChatHandler(p->GetSession()).PSendSysMessage(
-            "|cff00ff00[LevelSync]|r Your wallet was pooled to |cffffff00{}|r "
-            "(|cffffd700{}|r).",
-            caller->GetName(),
-            FormatMoneyString(amt));
+        ChatHandler(p->GetSession()).SendSysMessage(LANG_LEVELSYNC_MONEY_POOLED, caller->GetName().c_str(), FormatMoneyString(amt).c_str());
     }
 
     // Drain offline members. Read-then-zero is two queries rather than a
@@ -1088,7 +1092,7 @@ LevelSyncMgr::PoolResult LevelSyncMgr::PoolGroupMoney(Player* caller, uint32 gro
                 caller->ModifyMoney(int32(canTake));
             LOG_ERROR("module",
                 "[LevelSync] Money pool by GUID {} (group {}) drained {} copper "
-                "but caller wallet only accepted {} — {} copper orphaned, "
+                "but caller wallet only accepted {} â€” {} copper orphaned, "
                 "GM compensation may be needed.",
                 callerGuid, groupId, actualDrained, canTake,
                 actualDrained - canTake);

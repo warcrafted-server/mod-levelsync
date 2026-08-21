@@ -1,3 +1,18 @@
+<p align="center">
+  <a href="https://github.com/warcrafted-server">
+    <img src="https://raw.githubusercontent.com/warcrafted-server/WarCrafted-ControlP/main/Logo_github.jpg" alt="WarCrafted Universe Header" />
+  </a>
+</p>
+
+<p align="center">
+  🌐 <b>Idiomas / Languages:</b> <a href="README.es.md">Español 🇪🇸</a> | <a href="README.md">English 🇬🇧</a>
+</p>
+
+---
+
+- Estado de la última compilación con azerothcore: [![Build Status](https://github.com/warcrafted-server/mod-levelsync/actions/workflows/core-build.yml/badge.svg?branch=master)](https://github.com/warcrafted-server/mod-levelsync/actions) ![WoW Version](https://img.shields.io/badge/WoW-3.3.5a-blue) ![Last Commit](https://img.shields.io/github/last-commit/warcrafted-server/mod-levelsync)
+
+
 # mod-levelsync
 
 An AzerothCore module that syncs characters across multiple accounts to the same level, XP, and Individual Progression tier. Provides a traditional leveling experience (1-5 man) while keeping your alts in lockstep with your main — without manual edits. Built for private servers running large altbot setups (mod-playerbots).

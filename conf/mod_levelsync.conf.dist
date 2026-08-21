@@ -4,62 +4,199 @@
 
 [worldserver]
 
-# Enable or disable the module entirely.
-# Default: 1 (enabled)
+# ==============================================================================
+# ENGLISH:
+# LevelSync.Enable
+#   Enable or disable the module entirely.
+#   Default: 1 (enabled)
+#
+# ESPAÑOL:
+# LevelSync.Enable
+#   Habilita o deshabilita el módulo por completo.
+#   Por defecto: 1 (habilitado)
+#
+# LevelSync.Enable = 1
+# ==============================================================================
+
 LevelSync.Enable = 1
 
-# Allow level synchronisation within groups.
-# Default: 1 (enabled)
+
+# ==============================================================================
+# ENGLISH:
+# LevelSync.AllowLevelSync
+#   Allow level synchronisation within groups.
+#   Default: 1 (enabled)
+#
+# ESPAÑOL:
+# LevelSync.AllowLevelSync
+#   Permite la sincronización de nivel dentro de los grupos.
+#   Por defecto: 1 (habilitado)
+#
+# LevelSync.AllowLevelSync = 1
+# ==============================================================================
+
 LevelSync.AllowLevelSync = 1
 
-# Allow individual progression synchronisation within groups.
-# Default: 1 (enabled)
+
+# ==============================================================================
+# ENGLISH:
+# LevelSync.AllowProgressionSync
+#   Allow individual progression synchronisation within groups.
+#   Default: 1 (enabled)
+#
+# ESPAÑOL:
+# LevelSync.AllowProgressionSync
+#   Permite la sincronización de progresión individual dentro de los grupos.
+#   Por defecto: 1 (habilitado)
+#
+# LevelSync.AllowProgressionSync = 1
+# ==============================================================================
+
 LevelSync.AllowProgressionSync = 1
 
-# Allow players to use the .levelsync money command, which pools every
-# other sync-group member's gold into the caller's wallet in a single
-# one-shot operation. Subject to the same 10-second per-group cooldown
-# as the level/IP toggles.
-# Default: 1 (enabled)
+
+# ==============================================================================
+# ENGLISH:
+# LevelSync.AllowMoneyCommands
+#   Allow players to use the .levelsync money command, which pools every
+#   other sync-group member's gold into the caller's wallet in a single
+#   one-shot operation. Subject to the same 10-second per-group cooldown
+#   as the level/IP toggles.
+#   Default: 1 (enabled)
+#
+# ESPAÑOL:
+# LevelSync.AllowMoneyCommands
+#   Permite a los jugadores usar el comando .levelsync money, el cual reúne el
+#   oro de todos los demás miembros del grupo de sincronización en la bolsa del
+#   emisor en una única operación. Sujeto al mismo tiempo de recarga de 10
+#   segundos por grupo que las activaciones de nivel/IP.
+#   Por defecto: 1 (habilitado)
+#
+# LevelSync.AllowMoneyCommands = 1
+# ==============================================================================
+
 LevelSync.AllowMoneyCommands = 1
 
-# Allow players to use the .levelsync unbindall [name] command, which
-# is a non-GM equivalent of the core .instance unbind all command. It
-# wipes every bound instance the target has across all 4 difficulty
-# slots (dungeons + raids), preserving the binding for the map the
-# target is currently inside.
+
+# ==============================================================================
+# ENGLISH:
+# LevelSync.AllowRaidUnbind
+#   Allow players to use the .levelsync unbindall [name] command, which
+#   is a non-GM equivalent of the core .instance unbind all command. It
+#   wipes every bound instance the target has across all 4 difficulty
+#   slots (dungeons + raids), preserving the binding for the map the
+#   target is currently inside.
 #
-# Target resolution:
-#   - No arg → clicked/tab-selected player, falls back to self (same
-#     semantics as the stock GM command).
-#   - Name arg → online player matching that name (case-insensitive).
-#     Refused if the named player is offline.
+#   Target resolution:
+#     - No arg -> clicked/tab-selected player, falls back to self (same
+#       semantics as the stock GM command).
+#     - Name arg -> online player matching that name (case-insensitive).
+#       Refused if the named player is offline.
 #
-# This was added for personal/private servers where the operator wants
-# to give all players the convenience of clearing their own raid lockouts
-# without GM intervention. Not recommended for public servers with mixed
-# players, since stock WoW design assumes raid lockouts persist until
-# the weekly reset, and any non-GM player could clear any online
-# player's lockouts server-wide just by typing their name.
-# Default: 0 (disabled — command refuses with a "disabled by server" message)
-#          1 (enabled — anyone can use .levelsync unbindall)
+#   This was added for personal/private servers where the operator wants
+#   to give all players the convenience of clearing their own raid lockouts
+#   without GM intervention. Not recommended for public servers with mixed
+#   players, since stock WoW design assumes raid lockouts persist until
+#   the weekly reset, and any non-GM player could clear any online
+#   player's lockouts server-wide just by typing their name.
+#   Default: 0 (disabled - command refuses with a "disabled by server" message)
+#            1 (enabled - anyone can use .levelsync unbindall)
+#
+# ESPAÑOL:
+# LevelSync.AllowRaidUnbind
+#   Permite a los jugadores usar el comando .levelsync unbindall [nombre], el
+#   cual es un equivalente para no-GMs del comando base .instance unbind all.
+#   Limpia cada registro de estancia que el objetivo tenga en las 4 ranuras
+#   de dificultad (mazmorras + bandas), conservando el registro del mapa en
+#   el que se encuentra actualmente el objetivo.
+#
+#   Resolución del objetivo:
+#     - Sin argumento -> jugador seleccionado por clic/tabulador, o uno
+#       mismo como opción predeterminada (misma semántica que el comando GM
+#       estándar).
+#     - Con argumento de nombre -> jugador en línea que coincida con ese nombre
+#       (no distingue mayúsculas de minúsculas). Se rechaza si el jugador
+#       nombrado está fuera de línea.
+#
+#   Esto se añadió para servidores personales/privados donde el operador desea
+#   dar a todos los jugadores la comodidad de limpiar sus propios registros de
+#   banda sin intervención de un GM. No se recomienda para servidores públicos
+#   con jugadores variados, ya que el diseño predeterminado de WoW asume que
+#   los registros de banda persisten hasta el reinicio semanal, y cualquier
+#   jugador que no sea GM podría limpiar los registros de cualquier jugador
+#   en línea en todo el servidor simplemente escribiendo su nombre.
+#   Por defecto: 0 (deshabilitado - el comando se rechaza con un mensaje de
+#                   "deshabilitado por el servidor")
+#                1 (habilitado - cualquiera puede usar .levelsync unbindall)
+#
+# LevelSync.AllowRaidUnbind = 0
+# ==============================================================================
+
 LevelSync.AllowRaidUnbind = 0
 
-# Maximum number of accounts allowed per sync group (1-10).
-# Default: 6
+
+# ==============================================================================
+# ENGLISH:
+# LevelSync.MaxLinkedAccounts
+#   Maximum number of accounts allowed per sync group (1-10).
+#   Default: 6
+#
+# ESPAÑOL:
+# LevelSync.MaxLinkedAccounts
+#   Número máximo de cuentas permitidas por grupo de sincronización (1-10).
+#   Por defecto: 6
+#
+# LevelSync.MaxLinkedAccounts = 6
+# ==============================================================================
+
 LevelSync.MaxLinkedAccounts = 6
 
-# USE Death Knights as a sync source for characters below level 55.
-# When enabled, a DK in the group will cause sub-55 characters to be
-# boosted. Once all characters reach 55+ the DK participates normally.
-# Default: 0 (disabled, DK does not boost to 55)
-#          1 (enabled, DK boosts to level 55)
+
+# ==============================================================================
+# ENGLISH:
+# LevelSync.DeathKnightException
+#   USE Death Knights as a sync source for characters below level 55.
+#   When enabled, a DK in the group will cause sub-55 characters to be
+#   boosted. Once all characters reach 55+ the DK participates normally.
+#   Default: 0 (disabled, DK does not boost to 55)
+#            1 (enabled, DK boosts to level 55)
+#
+# ESPAÑOL:
+# LevelSync.DeathKnightException
+#   Usar Caballeros de la Muerte como fuente de sincronización para personajes
+#   por debajo del nivel 55. Cuando se habilita, un DK en el grupo provocará
+#   que los personajes menores de nivel 55 sean aumentados. Una vez que todos
+#   los personajes alcancen el nivel 55 o superior, el DK participa normalmente.
+#   Por defecto: 0 (deshabilitado, el DK no hace aumentar hasta el nivel 55)
+#                1 (habilitado, el DK hace aumentar hasta el nivel 55)
+#
+# LevelSync.DeathKnightException = 0
+# ==============================================================================
+
 LevelSync.DeathKnightException = 0
 
-# Allow Death Knights to sync IP tiers to characters below tier 13.
-# DKs start at tier 13 (end of TBC). When enabled, a DK in the group
-# will boost sub-tier-13 characters up. Once all characters reach tier 13+
-# the DK participates normally.
-# Default: 0 (disabled, DK does not boost IP tiers below 13)
-#          1 (enabled, DK boosts to tier 13)
+
+# ==============================================================================
+# ENGLISH:
+# LevelSync.DeathKnightIPException
+#   Allow Death Knights to sync IP tiers to characters below tier 13.
+#   DKs start at tier 13 (end of TBC). When enabled, a DK in the group
+#   will boost sub-tier-13 characters up. Once all characters reach tier 13+
+#   the DK participates normally.
+#   Default: 0 (disabled, DK does not boost IP tiers below 13)
+#            1 (enabled, DK boosts to tier 13)
+#
+# ESPAÑOL:
+# LevelSync.DeathKnightIPException
+#   Permite que los Caballeros de la Muerte sincronicen niveles de IP a
+#   personajes por debajo del nivel 13. Los DK comienzan en el nivel 13 (final
+#   de TBC). Cuando se habilita, un DK en el grupo aumentará a los personajes
+#   por debajo del nivel 13. Una vez que todos los personajes alcancen el nivel
+#   13 o superior, el DK participa normalmente.
+#   Por defecto: 0 (deshabilitado, el DK no aumenta niveles de IP por debajo de 13)
+#                1 (habilitado, el DK aumenta hasta el nivel 13)
+#
+# LevelSync.DeathKnightIPException = 0
+# ==============================================================================
+
 LevelSync.DeathKnightIPException = 0

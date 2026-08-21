@@ -1,0 +1,60 @@
+name: core-build
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+
+jobs:
+  project-build:
+    runs-on: ubuntu-latest
+    container:
+      image: debian:trixie
+    steps:
+      - name: Install base tools
+        run: |
+          apt-get update
+          apt-get install -y git cmake make gcc g++ clang libssl-dev libbz2-dev libreadline-dev libncurses-dev libboost-all-dev lsb-release gnupg wget
+
+      - name: Install Official MySQL 8
+        run: |
+          export MYSQL_APT_CONFIG_VERSION=0.8.36-1
+          wget https://dev.mysql.com/get/mysql-apt-config_${MYSQL_APT_CONFIG_VERSION}_all.deb
+          DEBIAN_FRONTEND="noninteractive" dpkg -i ./mysql-apt-config_${MYSQL_APT_CONFIG_VERSION}_all.deb
+          rm ./mysql-apt-config_${MYSQL_APT_CONFIG_VERSION}_all.deb
+          apt-get update
+          DEBIAN_FRONTEND="noninteractive" apt-get install -y mysql-server libmysqlclient-dev
+
+      - name: Checkout module
+        uses: actions/checkout@v4
+        with:
+          path: src/modules/mod-current
+
+      - name: Checkout AzerothCore
+        uses: actions/checkout@v4
+        with:
+          repository: azerothcore/azerothcore-wotlk
+          path: azerothcore
+
+      - name: Move module to core
+        run: |
+          mv src/modules/mod-current azerothcore/src/modules/
+
+      - name: Build project
+        run: |
+          cd azerothcore
+          mkdir build && cd build
+          cmake ../ \
+            -DCMAKE_INSTALL_PREFIX=$HOME/Servers/acore-playerbots/ \
+            -DCMAKE_C_COMPILER=/usr/bin/clang \
+            -DCMAKE_CXX_COMPILER=/usr/bin/clang++ \
+            -DWITH_WARNINGS=1 \
+            -DTOOLS_BUILD=all \
+            -DSCRIPTS=static \
+            -DMODULES=static
+          make -j$(nproc)

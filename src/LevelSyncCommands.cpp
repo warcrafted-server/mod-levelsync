@@ -17,6 +17,92 @@
 
 using namespace Acore::ChatCommands;
 
+enum LevelSyncCommandStrings
+{
+    LANG_LS_NO_MEMBERS              = 100010,
+    LANG_LS_ACCOUNT_CHARS           = 100011,
+    LANG_LS_MEMBER_IP_LINE          = 100012,
+    LANG_LS_SYNC_GROUP              = 100013,
+    LANG_LS_ACCOUNTS                = 100014,
+    LANG_LS_TOTAL_CHARS             = 100015,
+    LANG_LS_LEVEL_STATUS            = 100016,
+    LANG_LS_PROG_STATUS             = 100017,
+    LANG_LS_GROUP_MEMBERS           = 100018,
+    LANG_LS_ADDON_LINK              = 100019,
+    LANG_LS_MODULE_DISABLED         = 100020,
+    LANG_LS_USAGE_SETKEY            = 100021,
+    LANG_LS_ACCOUNT_KEY_SET         = 100022,
+    LANG_LS_USAGE_ADDACCOUNT        = 100023,
+    LANG_LS_ACCOUNT_NOT_FOUND       = 100024,
+    LANG_LS_KEY_REQUIRED            = 100025,
+    LANG_LS_INVALID_KEY             = 100026,
+    LANG_LS_ACCOUNT_DIFFERENT_GROUP = 100027,
+    LANG_LS_FAILED_CREATE           = 100028,
+    LANG_LS_GROUP_FULL              = 100029,
+    LANG_LS_NO_CHARS_ACCOUNT        = 100030,
+    LANG_LS_SKIPPED_OTHER_GROUP     = 100031,
+    LANG_LS_LINKED_CHARS            = 100032,
+    LANG_LS_LEVEL_OFF               = 100033,
+    LANG_LS_IP_OFF                  = 100034,
+    LANG_LS_NO_NEW_CHARS            = 100035,
+    LANG_LS_USAGE_ADDCHAR           = 100036,
+    LANG_LS_CHAR_NOT_FOUND          = 100037,
+    LANG_LS_KEY_REQUIRED_CHAR       = 100038,
+    LANG_LS_CHAR_DIFFERENT_GROUP    = 100039,
+    LANG_LS_CHAR_IN_YOUR_GROUP      = 100040,
+    LANG_LS_ADDED_TO_GROUP          = 100041,
+    LANG_LS_USAGE_REMOVEACCOUNT     = 100042,
+    LANG_LS_NOT_IN_GROUP            = 100043,
+    LANG_LS_USAGE_REMOVEACCOUNT_ID  = 100044,
+    LANG_LS_INVALID_ACCOUNT_ID      = 100045,
+    LANG_LS_ACCOUNT_NOT_IN_GROUP    = 100046,
+    LANG_LS_YOUR_REMOVED            = 100047,
+    LANG_LS_ACCOUNT_REMOVED         = 100048,
+    LANG_LS_USAGE_REMOVECHAR        = 100049,
+    LANG_LS_CHAR_NOT_IN_GROUP       = 100050,
+    LANG_LS_REMOVED_SYNC_GROUP      = 100051,
+    LANG_LS_YOUR_DISBANDED          = 100052,
+    LANG_LS_SYNC_GROUP_DISBANDED    = 100053,
+    LANG_LS_NO_GROUPS_FOUND         = 100054,
+    LANG_LS_DISBANDED_GROUPS        = 100055,
+    LANG_LS_USAGE_LISTACCOUNT       = 100056,
+    LANG_LS_KEY_REQUIRED_VIEW       = 100057,
+    LANG_LS_NO_CHARS_ACCOUNT_LIST   = 100058,
+    LANG_LS_CHARS_ON_ACCOUNT        = 100059,
+    LANG_LS_CHAR_LINE               = 100060,
+    LANG_LS_LEVEL_DISABLED_SRV      = 100061,
+    LANG_LS_USAGE_LEVEL             = 100062,
+    LANG_LS_LEVEL_FIRE_ONLY         = 100063,
+    LANG_LS_MUST_WAIT               = 100064,
+    LANG_LS_SYNCING_LEVEL           = 100065,
+    LANG_LS_LEVEL_FIRED             = 100066,
+    LANG_LS_LEVEL_SYNC_LEGACY       = 100067,
+    LANG_LS_PROG_DISABLED_SRV       = 100068,
+    LANG_LS_USAGE_IP                = 100069,
+    LANG_LS_IP_FIRE_ONLY            = 100070,
+    LANG_LS_SYNCING_PROG            = 100071,
+    LANG_LS_IP_FIRED                = 100072,
+    LANG_LS_PROG_SYNC_LEGACY        = 100073,
+    LANG_LS_MONEY_DISABLED_SRV      = 100074,
+    LANG_LS_NO_OTHER_MEMBERS        = 100075,
+    LANG_LS_NO_GOLD                 = 100076,
+    LANG_LS_CAP_EXCEEDED            = 100077,
+    LANG_LS_POOLED_FROM             = 100078,
+    LANG_LS_UNBIND_DISABLED_SRV     = 100079,
+    LANG_LS_NOT_FOUND_OFFLINE       = 100080,
+    LANG_LS_UNBOUND_INSTANCES       = 100081,
+    LANG_LS_UNBOUND_ON              = 100082,
+    LANG_LS_USAGE_GM_REMOVEALL      = 100083,
+    LANG_LS_KEY_REMOVED             = 100084,
+    LANG_LS_DISBANDED_BY_GM         = 100085,
+    LANG_LS_GROUP_DISBANDED         = 100086,
+    LANG_LS_USAGE_GM_XP             = 100087,
+    LANG_LS_XP_POSITIVE             = 100088,
+    LANG_LS_NO_TARGET               = 100089,
+    LANG_LS_GRANTED_XP              = 100090,
+};
+
+
 // -----------------------------------------------------------------------
 // Helpers
 // -----------------------------------------------------------------------
@@ -226,7 +312,7 @@ static void DisplayGroupMembers(ChatHandler* handler, uint32 groupId)
 
     if (!r)
     {
-        handler->PSendSysMessage("  (no members)");
+        handler->PSendSysMessage(LANG_LS_NO_MEMBERS);
         return;
     }
 
@@ -245,7 +331,7 @@ static void DisplayGroupMembers(ChatHandler* handler, uint32 groupId)
                 "SELECT COUNT(*) FROM levelsync_members WHERE group_id = {} AND account_id = {}",
                 groupId, accountId);
             uint64 charCount = acctCount ? acctCount->Fetch()[0].Get<uint64>() : 0;
-            handler->PSendSysMessage("  Account {}: Characters: {}", accountId, charCount);
+            handler->PSendSysMessage(LANG_LS_ACCOUNT_CHARS, accountId, charCount);
             currentAccount = accountId;
         }
 
@@ -268,7 +354,7 @@ static void DisplayGroupMembers(ChatHandler* handler, uint32 groupId)
             }
         }
 
-        handler->PSendSysMessage("    |cff{}{}|r (lvl {}) (|cffffff00{}|r) IP Tier: |cff{}{} - {}|r",
+        handler->PSendSysMessage(LANG_LS_MEMBER_IP_LINE,
             ClassColor(cls), CapFirst(name), static_cast<uint32>(displayLevel),
             ClassName(cls),
             IPTierColor(displayTier), static_cast<uint32>(displayTier), IPTierName(displayTier));
@@ -295,14 +381,14 @@ static void DisplayGroupStatus(ChatHandler* handler, uint32 groupId)
         "SELECT COUNT(*) FROM levelsync_members WHERE group_id = {}", groupId);
     uint64 totalChars = countResult ? countResult->Fetch()[0].Get<uint64>() : 0;
 
-    handler->PSendSysMessage("|cff00ff00[LevelSync]|r Sync Group #{}", groupId);
-    handler->PSendSysMessage("  Accounts: {}/{}", accounts, sLevelSync->GetMaxLinkedAccounts());
-    handler->PSendSysMessage("  Total Characters: {}", totalChars);
-    handler->PSendSysMessage("  Level sync: {}", levelReady ? "|cff00ff00Available|r" : "|cffff0000Disabled|r");
-    handler->PSendSysMessage("  Progression sync: {}", progReady ? "|cff00ff00Available|r" : "|cffff0000Disabled|r");
-    handler->PSendSysMessage("|cff00ff00[LevelSync]|r Group members:");
+    handler->PSendSysMessage(LANG_LS_SYNC_GROUP, groupId);
+    handler->PSendSysMessage(LANG_LS_ACCOUNTS, accounts, sLevelSync->GetMaxLinkedAccounts());
+    handler->PSendSysMessage(LANG_LS_TOTAL_CHARS, totalChars);
+    handler->PSendSysMessage(LANG_LS_LEVEL_STATUS, levelReady ? "|cff00ff00Available|r" : "|cffff0000Disabled|r");
+    handler->PSendSysMessage(LANG_LS_PROG_STATUS, progReady ? "|cff00ff00Available|r" : "|cffff0000Disabled|r");
+    handler->PSendSysMessage(LANG_LS_GROUP_MEMBERS);
     DisplayGroupMembers(handler, groupId);
-    handler->PSendSysMessage("|cff00ff00[LevelSync]|r For a graphical interface use the addon: |cff3399ffhttps://github.com/Lichborne-AC/LevelsyncUI|r");
+    handler->PSendSysMessage(LANG_LS_ADDON_LINK);
 }
 
 // Creates a new group and returns its group_id.
@@ -395,14 +481,14 @@ public:
     {
         if (!sLevelSync->IsEnabled())
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Module is disabled.");
+            handler->PSendSysMessage(LANG_LS_MODULE_DISABLED);
             return true;
         }
 
         char* keyArg = strtok(const_cast<char*>(args), " ");
         if (!keyArg)
         {
-            handler->PSendSysMessage("Usage: .levelsync setkey <key>");
+            handler->PSendSysMessage(LANG_LS_USAGE_SETKEY);
             return true;
         }
 
@@ -414,7 +500,7 @@ public:
             "ON DUPLICATE KEY UPDATE security_key = '{}'",
             accountId, hashed, hashed);
 
-        handler->PSendSysMessage("|cff00ff00[LevelSync]|r Account key set.");
+        handler->PSendSysMessage(LANG_LS_ACCOUNT_KEY_SET);
         return true;
     }
 
@@ -425,7 +511,7 @@ public:
     {
         if (!sLevelSync->IsEnabled())
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Module is disabled.");
+            handler->PSendSysMessage(LANG_LS_MODULE_DISABLED);
             return true;
         }
 
@@ -434,7 +520,7 @@ public:
 
         if (!accountArg)
         {
-            handler->PSendSysMessage("Usage: .levelsync addaccount <account> [key]");
+            handler->PSendSysMessage(LANG_LS_USAGE_ADDACCOUNT);
             return true;
         }
 
@@ -445,7 +531,7 @@ public:
         uint32 targetAccountId = GetAccountIdByName(std::string(accountArg));
         if (!targetAccountId)
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Account '{}' not found.", accountArg);
+            handler->PSendSysMessage(LANG_LS_ACCOUNT_NOT_FOUND, accountArg);
             return true;
         }
 
@@ -455,13 +541,13 @@ public:
         {
             if (!keyArg)
             {
-                handler->PSendSysMessage("|cff00ff00[LevelSync]|r A key is required to link another account.");
+                handler->PSendSysMessage(LANG_LS_KEY_REQUIRED);
                 return true;
             }
 
             if (!VerifyAccountKey(targetAccountId, std::string(keyArg)))
             {
-                handler->PSendSysMessage("|cff00ff00[LevelSync]|r Invalid key.");
+                handler->PSendSysMessage(LANG_LS_INVALID_KEY);
                 return true;
             }
 
@@ -479,7 +565,7 @@ public:
 
                 if (theirGroup != myGroup)
                 {
-                    handler->PSendSysMessage("|cff00ff00[LevelSync]|r That account is already in a different sync group.");
+                    handler->PSendSysMessage(LANG_LS_ACCOUNT_DIFFERENT_GROUP);
                     return true;
                 }
             }
@@ -489,7 +575,7 @@ public:
         uint32 groupId = GetOrCreateGroup(myGuid, myAccountId);
         if (!groupId)
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Failed to create sync group.");
+            handler->PSendSysMessage(LANG_LS_FAILED_CREATE);
             return true;
         }
 
@@ -504,7 +590,7 @@ public:
         {
             if (sLevelSync->GetGroupAccountCount(groupId) >= sLevelSync->GetMaxLinkedAccounts())
             {
-                handler->PSendSysMessage("|cff00ff00[LevelSync]|r Group is full ({}/{} accounts).",
+                handler->PSendSysMessage(LANG_LS_GROUP_FULL,
                     sLevelSync->GetGroupAccountCount(groupId),
                     sLevelSync->GetMaxLinkedAccounts());
                 return true;
@@ -516,7 +602,7 @@ public:
 
         if (!chars)
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r No characters found on account '{}'.", accountArg);
+            handler->PSendSysMessage(LANG_LS_NO_CHARS_ACCOUNT, accountArg);
             return true;
         }
 
@@ -539,7 +625,7 @@ public:
                 "SELECT group_id FROM levelsync_members WHERE char_guid = {}", charGuid);
             if (otherGroup)
             {
-                handler->PSendSysMessage("|cff00ff00[LevelSync]|r Skipped {} — already in another group.", charName);
+                handler->PSendSysMessage(LANG_LS_SKIPPED_OTHER_GROUP, charName);
                 continue;
             }
 
@@ -562,14 +648,14 @@ public:
                     "UPDATE levelsync_groups SET sync_progression = 0 WHERE group_id = {}", groupId);
 
             DisplayGroupStatus(handler, groupId);
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Linked {} character(s) from account '{}'.", linked, accountArg);
+            handler->PSendSysMessage(LANG_LS_LINKED_CHARS, linked, accountArg);
             if (levelWasOn)
-                handler->PSendSysMessage("|cff00ff00[LevelSync]|r Level sync turned |cffff0000OFF|r — use .levelsync level on to sync.");
+                handler->PSendSysMessage(LANG_LS_LEVEL_OFF);
             if (ipWasOn)
-                handler->PSendSysMessage("|cff00ff00[LevelSync]|r IP sync turned |cffff0000OFF|r — use .levelsync IP on to sync.");
+                handler->PSendSysMessage(LANG_LS_IP_OFF);
         }
         else
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r No new characters were linked from account '{}'.", accountArg);
+            handler->PSendSysMessage(LANG_LS_NO_NEW_CHARS, accountArg);
 
         return true;
     }
@@ -581,7 +667,7 @@ public:
     {
         if (!sLevelSync->IsEnabled())
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Module is disabled.");
+            handler->PSendSysMessage(LANG_LS_MODULE_DISABLED);
             return true;
         }
 
@@ -590,7 +676,7 @@ public:
 
         if (!nameArg)
         {
-            handler->PSendSysMessage("Usage: .levelsync addchar <charname> [key]");
+            handler->PSendSysMessage(LANG_LS_USAGE_ADDCHAR);
             return true;
         }
 
@@ -604,7 +690,7 @@ public:
             "SELECT guid, account FROM characters WHERE LOWER(name) = LOWER('{}')", EscChar(charName));
         if (!charResult)
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Character '{}' not found.", charName);
+            handler->PSendSysMessage(LANG_LS_CHAR_NOT_FOUND, charName);
             return true;
         }
 
@@ -616,13 +702,13 @@ public:
         {
             if (!keyArg)
             {
-                handler->PSendSysMessage("|cff00ff00[LevelSync]|r A key is required to link a character from another account.");
+                handler->PSendSysMessage(LANG_LS_KEY_REQUIRED_CHAR);
                 return true;
             }
 
             if (!VerifyAccountKey(targetAccountId, std::string(keyArg)))
             {
-                handler->PSendSysMessage("|cff00ff00[LevelSync]|r Invalid key.");
+                handler->PSendSysMessage(LANG_LS_INVALID_KEY);
                 return true;
             }
         }
@@ -633,20 +719,20 @@ public:
 
         if (targetGroup && targetGroup != myGroup)
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r {} is already in a different sync group.", charName);
+            handler->PSendSysMessage(LANG_LS_CHAR_DIFFERENT_GROUP, charName);
             return true;
         }
 
         if (targetGroup && targetGroup == myGroup)
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r {} is already in your sync group.", charName);
+            handler->PSendSysMessage(LANG_LS_CHAR_IN_YOUR_GROUP, charName);
             return true;
         }
 
         uint32 groupId = GetOrCreateGroup(myGuid, myAccountId);
         if (!groupId)
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Failed to create sync group.");
+            handler->PSendSysMessage(LANG_LS_FAILED_CREATE);
             return true;
         }
 
@@ -661,7 +747,7 @@ public:
         {
             if (sLevelSync->GetGroupAccountCount(groupId) >= sLevelSync->GetMaxLinkedAccounts())
             {
-                handler->PSendSysMessage("|cff00ff00[LevelSync]|r Group is full ({}/{} accounts).",
+                handler->PSendSysMessage(LANG_LS_GROUP_FULL,
                     sLevelSync->GetGroupAccountCount(groupId),
                     sLevelSync->GetMaxLinkedAccounts());
                 return true;
@@ -683,11 +769,11 @@ public:
                 "UPDATE levelsync_groups SET sync_progression = 0 WHERE group_id = {}", groupId);
 
         DisplayGroupStatus(handler, groupId);
-        handler->PSendSysMessage("|cff00ff00[LevelSync]|r {} added to sync group.", CapFirst(charName));
+        handler->PSendSysMessage(LANG_LS_ADDED_TO_GROUP, CapFirst(charName));
         if (levelWasOn)
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Level sync turned |cffff0000OFF|r — use .levelsync level on to sync.");
+            handler->PSendSysMessage(LANG_LS_LEVEL_OFF);
         if (ipWasOn)
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r IP sync turned |cffff0000OFF|r — use .levelsync IP on to sync.");
+            handler->PSendSysMessage(LANG_LS_IP_OFF);
 
         return true;
     }
@@ -700,14 +786,14 @@ public:
     {
         if (!sLevelSync->IsEnabled())
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Module is disabled.");
+            handler->PSendSysMessage(LANG_LS_MODULE_DISABLED);
             return true;
         }
 
         char* accountArg = strtok(const_cast<char*>(args), " ");
         if (!accountArg)
         {
-            handler->PSendSysMessage("Usage: .levelsync removeaccount <account> or .levelsync removeaccount # <accountid>");
+            handler->PSendSysMessage(LANG_LS_USAGE_REMOVEACCOUNT);
             return true;
         }
 
@@ -717,7 +803,7 @@ public:
         uint32 groupId = sLevelSync->GetGroupId(myGuid);
         if (!groupId)
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r You are not in a sync group.");
+            handler->PSendSysMessage(LANG_LS_NOT_IN_GROUP);
             return true;
         }
 
@@ -729,13 +815,13 @@ public:
             char* idArg = strtok(nullptr, " ");
             if (!idArg)
             {
-                handler->PSendSysMessage("Usage: .levelsync removeaccount # <accountid>");
+                handler->PSendSysMessage(LANG_LS_USAGE_REMOVEACCOUNT_ID);
                 return true;
             }
             targetAccountId = static_cast<uint32>(std::strtoul(idArg, nullptr, 10));
             if (!targetAccountId)
             {
-                handler->PSendSysMessage("|cff00ff00[LevelSync]|r Invalid account ID.");
+                handler->PSendSysMessage(LANG_LS_INVALID_ACCOUNT_ID);
                 return true;
             }
             displayName = std::string(idArg);
@@ -745,7 +831,7 @@ public:
             targetAccountId = GetAccountIdByName(std::string(accountArg));
             if (!targetAccountId)
             {
-                handler->PSendSysMessage("|cff00ff00[LevelSync]|r Account '{}' not found.", accountArg);
+                handler->PSendSysMessage(LANG_LS_ACCOUNT_NOT_FOUND, accountArg);
                 return true;
             }
             displayName = std::string(accountArg);
@@ -760,7 +846,7 @@ public:
 
         if (!toRemove)
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Account '{}' is not in your sync group.", displayName);
+            handler->PSendSysMessage(LANG_LS_ACCOUNT_NOT_IN_GROUP, displayName);
             return true;
         }
 
@@ -768,8 +854,7 @@ public:
         {
             uint32 g = toRemove->Fetch()[0].Get<uint32>();
             if (Player* member = ObjectAccessor::FindPlayerByLowGUID(g))
-                ChatHandler(member->GetSession()).PSendSysMessage(
-                    "|cff00ff00[LevelSync]|r Your character has been removed from the sync group.");
+                ChatHandler(member->GetSession()).PSendSysMessage(LANG_LS_YOUR_REMOVED);
         } while (toRemove->NextRow());
 
         CharacterDatabase.DirectExecute(
@@ -779,7 +864,7 @@ public:
             groupId, targetAccountId);
 
         DisplayGroupStatus(handler, groupId);
-        handler->PSendSysMessage("|cff00ff00[LevelSync]|r Account '{}' removed from sync group.", displayName);
+        handler->PSendSysMessage(LANG_LS_ACCOUNT_REMOVED, displayName);
         return true;
     }
 
@@ -790,14 +875,14 @@ public:
     {
         if (!sLevelSync->IsEnabled())
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Module is disabled.");
+            handler->PSendSysMessage(LANG_LS_MODULE_DISABLED);
             return true;
         }
 
         char* nameArg = strtok(const_cast<char*>(args), " ");
         if (!nameArg)
         {
-            handler->PSendSysMessage("Usage: .levelsync removechar <charname>");
+            handler->PSendSysMessage(LANG_LS_USAGE_REMOVECHAR);
             return true;
         }
 
@@ -807,7 +892,7 @@ public:
         uint32 groupId = sLevelSync->GetGroupId(myGuid);
         if (!groupId)
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r You are not in a sync group.");
+            handler->PSendSysMessage(LANG_LS_NOT_IN_GROUP);
             return true;
         }
 
@@ -816,7 +901,7 @@ public:
             "SELECT guid, account FROM characters WHERE LOWER(name) = LOWER('{}')", EscChar(charName));
         if (!charResult)
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Character '{}' not found.", charName);
+            handler->PSendSysMessage(LANG_LS_CHAR_NOT_FOUND, charName);
             return true;
         }
 
@@ -825,20 +910,19 @@ public:
 
         if (targetGroup != groupId)
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r {} is not in your sync group.", charName);
+            handler->PSendSysMessage(LANG_LS_CHAR_NOT_IN_GROUP, charName);
             return true;
         }
 
         // Notify if online
         if (Player* member = ObjectAccessor::FindPlayerByLowGUID(targetGuid))
-            ChatHandler(member->GetSession()).PSendSysMessage(
-                "|cff00ff00[LevelSync]|r Your character has been removed from the sync group.");
+            ChatHandler(member->GetSession()).PSendSysMessage(LANG_LS_YOUR_REMOVED);
 
         CharacterDatabase.DirectExecute(
             "DELETE FROM levelsync_members WHERE char_guid = {}", targetGuid);
 
         DisplayGroupStatus(handler, groupId);
-        handler->PSendSysMessage("|cff00ff00[LevelSync]|r {} removed from sync group.", CapFirst(charName));
+        handler->PSendSysMessage(LANG_LS_REMOVED_SYNC_GROUP, CapFirst(charName));
         return true;
     }
 
@@ -849,7 +933,7 @@ public:
     {
         if (!sLevelSync->IsEnabled())
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Module is disabled.");
+            handler->PSendSysMessage(LANG_LS_MODULE_DISABLED);
             return true;
         }
 
@@ -859,7 +943,7 @@ public:
         uint32 groupId = sLevelSync->GetGroupId(myGuid);
         if (!groupId)
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r You are not in a sync group.");
+            handler->PSendSysMessage(LANG_LS_NOT_IN_GROUP);
             return true;
         }
 
@@ -867,8 +951,7 @@ public:
         for (uint32 g : sLevelSync->GetGroupMemberGuids(groupId, myGuid))
         {
             if (Player* member = ObjectAccessor::FindPlayerByLowGUID(g))
-                ChatHandler(member->GetSession()).PSendSysMessage(
-                    "|cff00ff00[LevelSync]|r Your sync group has been disbanded.");
+                ChatHandler(member->GetSession()).PSendSysMessage(LANG_LS_YOUR_DISBANDED);
         }
 
         // Wipe members then group
@@ -878,7 +961,7 @@ public:
         CharacterDatabase.Execute(
             "DELETE FROM levelsync_groups WHERE group_id = {}", groupId);
 
-        handler->PSendSysMessage("|cff00ff00[LevelSync]|r Sync group disbanded.");
+        handler->PSendSysMessage(LANG_LS_SYNC_GROUP_DISBANDED);
         return true;
     }
 
@@ -889,7 +972,7 @@ public:
     {
         if (!sLevelSync->IsEnabled())
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Module is disabled.");
+            handler->PSendSysMessage(LANG_LS_MODULE_DISABLED);
             return true;
         }
 
@@ -904,7 +987,7 @@ public:
 
         if (!r)
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r No sync groups found for your account.");
+            handler->PSendSysMessage(LANG_LS_NO_GROUPS_FOUND);
             return true;
         }
 
@@ -918,8 +1001,7 @@ public:
             for (uint32 g : sLevelSync->GetGroupMemberGuids(groupId))
             {
                 if (Player* member = ObjectAccessor::FindPlayerByLowGUID(g))
-                    ChatHandler(member->GetSession()).PSendSysMessage(
-                        "|cff00ff00[LevelSync]|r Your sync group has been disbanded.");
+                    ChatHandler(member->GetSession()).PSendSysMessage(LANG_LS_YOUR_DISBANDED);
             }
 
             CharacterDatabase.Execute(
@@ -929,7 +1011,7 @@ public:
                 "DELETE FROM levelsync_groups WHERE group_id = {}", groupId);
         }
 
-        handler->PSendSysMessage("|cff00ff00[LevelSync]|r Disbanded {} sync group(s). Keys preserved.",
+        handler->PSendSysMessage(LANG_LS_DISBANDED_GROUPS,
             static_cast<uint32>(groups.size()));
         return true;
     }
@@ -941,7 +1023,7 @@ public:
     {
         if (!sLevelSync->IsEnabled())
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Module is disabled.");
+            handler->PSendSysMessage(LANG_LS_MODULE_DISABLED);
             return true;
         }
 
@@ -949,7 +1031,7 @@ public:
         char* keyArg     = strtok(nullptr, " ");
         if (!accountArg)
         {
-            handler->PSendSysMessage("Usage: .levelsync listaccount <account> [key]");
+            handler->PSendSysMessage(LANG_LS_USAGE_LISTACCOUNT);
             return true;
         }
 
@@ -959,7 +1041,7 @@ public:
         uint32 targetAccountId = GetAccountIdByName(std::string(accountArg));
         if (!targetAccountId)
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Account '{}' not found.", accountArg);
+            handler->PSendSysMessage(LANG_LS_ACCOUNT_NOT_FOUND, accountArg);
             return true;
         }
 
@@ -968,12 +1050,12 @@ public:
         {
             if (!keyArg)
             {
-                handler->PSendSysMessage("|cff00ff00[LevelSync]|r A key is required to view another account's characters.");
+                handler->PSendSysMessage(LANG_LS_KEY_REQUIRED_VIEW);
                 return true;
             }
             if (!VerifyAccountKey(targetAccountId, std::string(keyArg)))
             {
-                handler->PSendSysMessage("|cff00ff00[LevelSync]|r Invalid key.");
+                handler->PSendSysMessage(LANG_LS_INVALID_KEY);
                 return true;
             }
         }
@@ -988,11 +1070,11 @@ public:
 
         if (!chars)
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r No characters on account '{}'.", accountArg);
+            handler->PSendSysMessage(LANG_LS_NO_CHARS_ACCOUNT_LIST, accountArg);
             return true;
         }
 
-        handler->PSendSysMessage("|cff00ff00[LevelSync]|r Characters on account '{}':", accountArg);
+        handler->PSendSysMessage(LANG_LS_CHARS_ON_ACCOUNT, accountArg);
         do
         {
             std::string name  = chars->Fetch()[0].Get<std::string>();
@@ -1002,7 +1084,7 @@ public:
 
             std::string status = grp ? "[Group " + std::to_string(grp) + "]" : "[No Group]";
 
-            handler->PSendSysMessage("  |cff{}{}|r (lv {}) ({}) {}",
+            handler->PSendSysMessage(LANG_LS_CHAR_LINE,
                 ClassColor(cls), name, static_cast<uint32>(level), ClassName(cls), status);
         } while (chars->NextRow());
 
@@ -1031,14 +1113,14 @@ public:
 
         if (!sLevelSync->IsEnabled())
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Module is disabled.");
+            handler->PSendSysMessage(LANG_LS_MODULE_DISABLED);
             return true;
         }
 
         uint32 groupId = sLevelSync->GetGroupId(myGuid);
         if (!groupId)
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r You are not in a sync group.");
+            handler->PSendSysMessage(LANG_LS_NOT_IN_GROUP);
             return true;
         }
 
@@ -1057,32 +1139,32 @@ public:
     {
         if (!sLevelSync->IsEnabled())
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Module is disabled.");
+            handler->PSendSysMessage(LANG_LS_MODULE_DISABLED);
             return true;
         }
 
         if (!sLevelSync->IsLevelSyncAllowed())
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Level sync is disabled by the server.");
+            handler->PSendSysMessage(LANG_LS_LEVEL_DISABLED_SRV);
             return true;
         }
 
         char* arg = strtok(const_cast<char*>(args), " ");
         if (!arg)
         {
-            handler->PSendSysMessage("Usage: .levelsync level on");
+            handler->PSendSysMessage(LANG_LS_USAGE_LEVEL);
             return true;
         }
 
         std::string argStr(arg);
         if (argStr == "off")
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Level sync is fire-only — nothing to turn off. Use .levelsync level on to fire a sync.");
+            handler->PSendSysMessage(LANG_LS_LEVEL_FIRE_ONLY);
             return true;
         }
         if (argStr != "on")
         {
-            handler->PSendSysMessage("Usage: .levelsync level on");
+            handler->PSendSysMessage(LANG_LS_USAGE_LEVEL);
             return true;
         }
 
@@ -1092,7 +1174,7 @@ public:
         uint32 groupId = sLevelSync->GetGroupId(myGuid);
         if (!groupId)
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r You are not in a sync group.");
+            handler->PSendSysMessage(LANG_LS_NOT_IN_GROUP);
             return true;
         }
 
@@ -1103,18 +1185,17 @@ public:
             uint32 secondsRemaining = 0;
             if (!sLevelSync->TryConsumeToggleCooldown(groupId, secondsRemaining))
             {
-                handler->PSendSysMessage(
-                    "|cff00ff00[LevelSync]|r Must wait |cffff0000{}|r second(s) before resync.",
+                handler->PSendSysMessage(LANG_LS_MUST_WAIT,
                     secondsRemaining);
                 return true;
             }
         }
 
-        handler->PSendSysMessage("|cff00ff00[LevelSync]|r Syncing group to highest level...");
+        handler->PSendSysMessage(LANG_LS_SYNCING_LEVEL);
         sLevelSync->SyncGroupOnLevelToggle(groupId);
 
         DisplayGroupStatus(handler, groupId);
-        handler->PSendSysMessage("|cff00ff00[LevelSync]|r Level sync fired. Status is back to |cff00ff00Available|r (10s cooldown).");
+        handler->PSendSysMessage(LANG_LS_LEVEL_FIRED);
 
         return true;
 
@@ -1125,11 +1206,11 @@ public:
         //     enable ? 1 : 0, groupId);
         // if (enable)
         // {
-        //     handler->PSendSysMessage("|cff00ff00[LevelSync]|r Syncing group to highest level...");
+        //     handler->PSendSysMessage(LANG_LS_SYNCING_LEVEL);
         //     sLevelSync->SyncGroupOnLevelToggle(groupId);
         // }
         // DisplayGroupStatus(handler, groupId);
-        // handler->PSendSysMessage("|cff00ff00[LevelSync]|r Level sync {}.", enable ? "|cff00ff00enabled|r" : "|cffff0000disabled|r");
+        // handler->PSendSysMessage(LANG_LS_LEVEL_SYNC_LEGACY, enable ? "|cff00ff00enabled|r" : "|cffff0000disabled|r");
     }
 
     // -------------------------------------------------------------------
@@ -1143,32 +1224,32 @@ public:
     {
         if (!sLevelSync->IsEnabled())
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Module is disabled.");
+            handler->PSendSysMessage(LANG_LS_MODULE_DISABLED);
             return true;
         }
 
         if (!sLevelSync->IsProgressionAllowed())
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Progression sync is disabled by the server.");
+            handler->PSendSysMessage(LANG_LS_PROG_DISABLED_SRV);
             return true;
         }
 
         char* arg = strtok(const_cast<char*>(args), " ");
         if (!arg)
         {
-            handler->PSendSysMessage("Usage: .levelsync IP on");
+            handler->PSendSysMessage(LANG_LS_USAGE_IP);
             return true;
         }
 
         std::string argStr(arg);
         if (argStr == "off")
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r IP sync is fire-only — nothing to turn off. Use .levelsync IP on to fire a sync.");
+            handler->PSendSysMessage(LANG_LS_IP_FIRE_ONLY);
             return true;
         }
         if (argStr != "on")
         {
-            handler->PSendSysMessage("Usage: .levelsync IP on");
+            handler->PSendSysMessage(LANG_LS_USAGE_IP);
             return true;
         }
 
@@ -1178,7 +1259,7 @@ public:
         uint32 groupId = sLevelSync->GetGroupId(myGuid);
         if (!groupId)
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r You are not in a sync group.");
+            handler->PSendSysMessage(LANG_LS_NOT_IN_GROUP);
             return true;
         }
 
@@ -1189,18 +1270,17 @@ public:
             uint32 secondsRemaining = 0;
             if (!sLevelSync->TryConsumeToggleCooldown(groupId, secondsRemaining))
             {
-                handler->PSendSysMessage(
-                    "|cff00ff00[LevelSync]|r Must wait |cffff0000{}|r second(s) before resync.",
+                handler->PSendSysMessage(LANG_LS_MUST_WAIT,
                     secondsRemaining);
                 return true;
             }
         }
 
-        handler->PSendSysMessage("|cff00ff00[LevelSync]|r Syncing group progression...");
+        handler->PSendSysMessage(LANG_LS_SYNCING_PROG);
         sLevelSync->SyncIPOnToggle(groupId);
 
         DisplayGroupStatus(handler, groupId);
-        handler->PSendSysMessage("|cff00ff00[LevelSync]|r IP sync fired. Status is back to |cff00ff00Available|r (10s cooldown).");
+        handler->PSendSysMessage(LANG_LS_IP_FIRED);
 
         return true;
 
@@ -1211,11 +1291,11 @@ public:
         //     enable ? 1 : 0, groupId);
         // if (enable)
         // {
-        //     handler->PSendSysMessage("|cff00ff00[LevelSync]|r Syncing group progression...");
+        //     handler->PSendSysMessage(LANG_LS_SYNCING_PROG);
         //     sLevelSync->SyncIPOnToggle(groupId);
         // }
         // DisplayGroupStatus(handler, groupId);
-        // handler->PSendSysMessage("|cff00ff00[LevelSync]|r Progression sync {}.", enable ? "|cff00ff00enabled|r" : "|cffff0000disabled|r");
+        // handler->PSendSysMessage(LANG_LS_PROG_SYNC_LEGACY, enable ? "|cff00ff00enabled|r" : "|cffff0000disabled|r");
     }
 
     // -------------------------------------------------------------------
@@ -1233,13 +1313,13 @@ public:
     {
         if (!sLevelSync->IsEnabled())
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Module is disabled.");
+            handler->PSendSysMessage(LANG_LS_MODULE_DISABLED);
             return true;
         }
 
         if (!sLevelSync->IsMoneyCommandsAllowed())
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Money commands are disabled by the server.");
+            handler->PSendSysMessage(LANG_LS_MONEY_DISABLED_SRV);
             return true;
         }
 
@@ -1249,7 +1329,7 @@ public:
         uint32 groupId = sLevelSync->GetGroupId(myGuid);
         if (!groupId)
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r You are not in a sync group.");
+            handler->PSendSysMessage(LANG_LS_NOT_IN_GROUP);
             return true;
         }
 
@@ -1259,8 +1339,7 @@ public:
             uint32 secondsRemaining = 0;
             if (!sLevelSync->TryConsumeToggleCooldown(groupId, secondsRemaining))
             {
-                handler->PSendSysMessage(
-                    "|cff00ff00[LevelSync]|r Must wait |cffff0000{}|r second(s) before resync.",
+                handler->PSendSysMessage(LANG_LS_MUST_WAIT,
                     secondsRemaining);
                 return true;
             }
@@ -1271,13 +1350,11 @@ public:
         switch (result.status)
         {
             case LevelSyncMgr::PoolStatus::AloneInGroup:
-                handler->PSendSysMessage(
-                    "|cff00ff00[LevelSync]|r No other members in your sync group.");
+                handler->PSendSysMessage(LANG_LS_NO_OTHER_MEMBERS);
                 return true;
 
             case LevelSyncMgr::PoolStatus::NoGold:
-                handler->PSendSysMessage(
-                    "|cff00ff00[LevelSync]|r Group has no gold to pool.");
+                handler->PSendSysMessage(LANG_LS_NO_GOLD);
                 return true;
 
             case LevelSyncMgr::PoolStatus::CapExceeded:
@@ -1286,9 +1363,7 @@ public:
                     result.totalDrained > 0xFFFFFFFFull
                         ? 0xFFFFFFFFu
                         : uint32(result.totalDrained));
-                handler->PSendSysMessage(
-                    "|cff00ff00[LevelSync]|r Total |cffffd700{}|r would exceed "
-                    "the gold cap. Withdraw manually first.",
+                handler->PSendSysMessage(LANG_LS_CAP_EXCEEDED,
                     total);
                 return true;
             }
@@ -1299,9 +1374,7 @@ public:
                     result.totalDrained > 0xFFFFFFFFull
                         ? 0xFFFFFFFFu
                         : uint32(result.totalDrained));
-                handler->PSendSysMessage(
-                    "|cff00ff00[LevelSync]|r Pooled |cffffd700{}|r from {} member(s) "
-                    "into your wallet.",
+                handler->PSendSysMessage(LANG_LS_POOLED_FROM,
                     total, result.contributors);
                 return true;
             }
@@ -1329,13 +1402,13 @@ public:
     {
         if (!sLevelSync->IsEnabled())
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Module is disabled.");
+            handler->PSendSysMessage(LANG_LS_MODULE_DISABLED);
             return true;
         }
 
         if (!sLevelSync->IsRaidUnbindAllowed())
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Unbind is disabled by the server.");
+            handler->PSendSysMessage(LANG_LS_UNBIND_DISABLED_SRV);
             return true;
         }
 
@@ -1350,8 +1423,7 @@ public:
             target = ObjectAccessor::FindPlayerByName(std::string(nameArg));
             if (!target)
             {
-                handler->PSendSysMessage(
-                    "|cff00ff00[LevelSync]|r '{}' not found or offline.", nameArg);
+                handler->PSendSysMessage(LANG_LS_NOT_FOUND_OFFLINE, nameArg);
                 return true;
             }
         }
@@ -1368,9 +1440,9 @@ public:
         uint32 counter = UnbindAllInstancesOn(target);
 
         if (target == handler->GetSession()->GetPlayer())
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Unbound |cffffff00{}|r instance(s).", counter);
+            handler->PSendSysMessage(LANG_LS_UNBOUND_INSTANCES, counter);
         else
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Unbound |cffffff00{}|r instance(s) on {}.",
+            handler->PSendSysMessage(LANG_LS_UNBOUND_ON,
                 counter, target->GetName());
         return true;
     }
@@ -1394,8 +1466,7 @@ public:
             target = ObjectAccessor::FindPlayerByName(std::string(nameArg));
             if (!target)
             {
-                handler->PSendSysMessage(
-                    "|cff00ff00[LevelSync]|r '{}' not found or offline.", nameArg);
+                handler->PSendSysMessage(LANG_LS_NOT_FOUND_OFFLINE, nameArg);
                 return true;
             }
         }
@@ -1412,9 +1483,9 @@ public:
         uint32 counter = UnbindAllInstancesOn(target);
 
         if (target == handler->GetSession()->GetPlayer())
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Unbound |cffffff00{}|r instance(s).", counter);
+            handler->PSendSysMessage(LANG_LS_UNBOUND_INSTANCES, counter);
         else
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Unbound |cffffff00{}|r instance(s) on {}.",
+            handler->PSendSysMessage(LANG_LS_UNBOUND_ON,
                 counter, target->GetName());
         return true;
     }
@@ -1427,7 +1498,7 @@ public:
         char* arg = strtok(const_cast<char*>(args), " ");
         if (!arg)
         {
-            handler->PSendSysMessage("Usage: .levelsync gm removeall <charname>");
+            handler->PSendSysMessage(LANG_LS_USAGE_GM_REMOVEALL);
             return true;
         }
 
@@ -1438,7 +1509,7 @@ public:
 
         if (!charResult)
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r Character '{}' not found.", target);
+            handler->PSendSysMessage(LANG_LS_CHAR_NOT_FOUND, target);
             return true;
         }
 
@@ -1456,7 +1527,7 @@ public:
             // Not in a group — just nuke their key
             CharacterDatabase.Execute(
                 "DELETE FROM levelsync_account_keys WHERE account_id = {}", accountId);
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r '{}' is not in a sync group. Account key removed.", target);
+            handler->PSendSysMessage(LANG_LS_KEY_REMOVED, target);
             return true;
         }
 
@@ -1466,8 +1537,7 @@ public:
         for (uint32 g : sLevelSync->GetGroupMemberGuids(groupId))
         {
             if (Player* member = ObjectAccessor::FindPlayerByLowGUID(g))
-                ChatHandler(member->GetSession()).PSendSysMessage(
-                    "|cff00ff00[LevelSync]|r Your sync group has been disbanded by a GM.");
+                ChatHandler(member->GetSession()).PSendSysMessage(LANG_LS_DISBANDED_BY_GM);
         }
 
         // Wipe keys, members, group
@@ -1483,7 +1553,7 @@ public:
         CharacterDatabase.Execute(
             "DELETE FROM levelsync_groups WHERE group_id = {}", groupId);
 
-        handler->PSendSysMessage("|cff00ff00[LevelSync]|r Group #{} fully disbanded. All keys removed.", groupId);
+        handler->PSendSysMessage(LANG_LS_GROUP_DISBANDED, groupId);
         return true;
     }
 
@@ -1500,14 +1570,14 @@ public:
         char* arg = strtok(const_cast<char*>(args), " ");
         if (!arg)
         {
-            handler->PSendSysMessage("Usage: .levelsync gm xp <amount>");
+            handler->PSendSysMessage(LANG_LS_USAGE_GM_XP);
             return true;
         }
 
         int32 amount = atoi(arg);
         if (amount <= 0)
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r XP amount must be a positive integer.");
+            handler->PSendSysMessage(LANG_LS_XP_POSITIVE);
             return true;
         }
 
@@ -1517,14 +1587,13 @@ public:
 
         if (!target)
         {
-            handler->PSendSysMessage("|cff00ff00[LevelSync]|r No valid target.");
+            handler->PSendSysMessage(LANG_LS_NO_TARGET);
             return true;
         }
 
         target->GiveXP(static_cast<uint32>(amount), nullptr);
 
-        handler->PSendSysMessage(
-            "|cff00ff00[LevelSync]|r Granted {} XP to {} (now level {}, xp {}).",
+        handler->PSendSysMessage(LANG_LS_GRANTED_XP,
             amount, target->GetName(),
             static_cast<uint32>(target->GetLevel()),
             target->GetUInt32Value(PLAYER_XP));

@@ -237,7 +237,7 @@ void LevelSyncMgr::ApplyLevelToOnline(Player* target, uint8 newLevel)
     target->SetUInt32Value(PLAYER_XP, 0);
     _syncing = false;
 
-    ChatHandler(target->GetSession()).SendSysMessage(LANG_LEVELSYNC_LEVEL_UPDATED, newLevel);
+    ChatHandler(target->GetSession()).PSendSysMessage(LANG_LEVELSYNC_LEVEL_UPDATED, newLevel);
 }
 
 void LevelSyncMgr::BatchUpdateOfflineLevel(const std::vector<uint32>& guids, uint8 newLevel, uint8 minCurrentLevel)
@@ -664,7 +664,7 @@ void LevelSyncMgr::ApplyIPTierToOnline(Player* target, uint8 newTier)
 
     _syncingIP = false;
 
-    ChatHandler(target->GetSession()).SendSysMessage(LANG_LEVELSYNC_IP_UPDATED, newTier);
+    ChatHandler(target->GetSession()).PSendSysMessage(LANG_LEVELSYNC_IP_UPDATED, newTier);
 }
 
 void LevelSyncMgr::BatchUpdateOfflineIPTier(const std::vector<uint32>& guids, uint8 newTier, uint8 minTier)
@@ -1026,7 +1026,7 @@ LevelSyncMgr::PoolResult LevelSyncMgr::PoolGroupMoney(Player* caller, uint32 gro
         actualDrained += amt;
         ++out.contributors;
 
-        ChatHandler(p->GetSession()).SendSysMessage(LANG_LEVELSYNC_MONEY_POOLED, caller->GetName().c_str(), FormatMoneyString(amt).c_str());
+        ChatHandler(p->GetSession()).PSendSysMessage(LANG_LEVELSYNC_MONEY_POOLED, caller->GetName().c_str(), FormatMoneyString(amt).c_str());
     }
 
     // Drain offline members. Read-then-zero is two queries rather than a

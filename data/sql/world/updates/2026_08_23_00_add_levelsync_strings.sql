@@ -10,7 +10,7 @@
 DELETE FROM `acore_string` WHERE `entry` BETWEEN 100006 AND 100008;
 DELETE FROM `acore_string` WHERE `entry` BETWEEN 100010 AND 100090;
 
-INSERT INTO `acore_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES
+INSERT INTO `acore_string` (`entry`, `content_default`, `locale_koKR`, `locale_frFR`, `locale_deDE`, `locale_zhCN`, `locale_zhTW`, `locale_esES`, `locale_esMX`, `locale_ruRU`) VALUES
 (100006, '|cff00ff00[LevelSync]|r Your level has been updated to %u by the group sync.', NULL, NULL, NULL, NULL, NULL, '|cff00ff00[LevelSync]|r Tu nivel ha sido actualizado a %u por la sincronización del grupo.', NULL, NULL),
 (100007, '|cff00ff00[LevelSync]|r Your progression tier has been updated to %u by the group sync.', NULL, NULL, NULL, NULL, NULL, '|cff00ff00[LevelSync]|r Tu tier de progresión ha sido actualizado a %u por la sincronización del grupo.', NULL, NULL),
 (100008, '|cff00ff00[LevelSync]|r Your wallet was pooled to |cffffff00%s|r (|cffffd700%s|r).', NULL, NULL, NULL, NULL, NULL, '|cff00ff00[LevelSync]|r Tu monedero ha sido acumulado, total |cffffff00%s|r (|cffffd700%s|r).', NULL, NULL),
@@ -63,7 +63,7 @@ INSERT INTO `acore_string` (`entry`, `content_default`, `content_loc1`, `content
 (100056, 'Usage: .levelsync listaccount <account> [key]', NULL, NULL, NULL, NULL, NULL, 'Uso: .levelsync listaccount <cuenta> [clave]', NULL, NULL),
 (100057, '|cff00ff00[LevelSync]|r A key is required to view another account''s characters.', NULL, NULL, NULL, NULL, NULL, '|cff00ff00[LevelSync]|r Se requiere una clave para ver los personajes de otra cuenta.', NULL, NULL),
 (100058, '|cff00ff00[LevelSync]|r No characters on account ''{}''.', NULL, NULL, NULL, NULL, NULL, '|cff00ff00[LevelSync]|r No hay personajes en la cuenta ''{}''.', NULL, NULL),
-(100059, '|cff00ff00[LevelSync]|r Characters on account ''{}'':, NULL, NULL, NULL, NULL, NULL, '|cff00ff00[LevelSync]|r Personajes en la cuenta ''{}'':', NULL, NULL),
+(100059, '|cff00ff00[LevelSync]|r Characters on account ''{}'':', NULL, NULL, NULL, NULL, NULL, '|cff00ff00[LevelSync]|r Personajes en la cuenta ''{}'':', NULL, NULL),
 (100060, '  |cff{}{}|r (lv {}) ({}) {}', NULL, NULL, NULL, NULL, NULL, '  |cff{}{}|r (nivel {}) ({}) {}', NULL, NULL),
 (100061, '|cff00ff00[LevelSync]|r Level sync is disabled by the server.', NULL, NULL, NULL, NULL, NULL, '|cff00ff00[LevelSync]|r La sincronización de nivel está desactivada por el servidor.', NULL, NULL),
 (100062, 'Usage: .levelsync level on', NULL, NULL, NULL, NULL, NULL, 'Uso: .levelsync level on', NULL, NULL),

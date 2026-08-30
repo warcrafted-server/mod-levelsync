@@ -34,16 +34,13 @@ static std::string FormatMoneyString(uint32 copper)
     return out;
 }
 
-// -------------------------------------------------------------------
-// Reserved string range: 100006 - 100009.
-// (100009 is left free as a spare for future auto-sync notifications.)
-// The command/chat strings (LevelSyncCommands.cpp) begin at 100010.
-// -------------------------------------------------------------------
+// module_string ids 0-2. The command/chat strings (LevelSyncCommands.cpp)
+// continue at 3.
 enum LevelSyncStrings
 {
-    LANG_LEVELSYNC_LEVEL_UPDATED = 100006,
-    LANG_LEVELSYNC_IP_UPDATED    = 100007,
-    LANG_LEVELSYNC_MONEY_POOLED  = 100008,
+    LANG_LEVELSYNC_LEVEL_UPDATED = 0,
+    LANG_LEVELSYNC_IP_UPDATED    = 1,
+    LANG_LEVELSYNC_MONEY_POOLED  = 2,
 };
 
 LevelSyncMgr* LevelSyncMgr::instance()
@@ -237,7 +234,7 @@ void LevelSyncMgr::ApplyLevelToOnline(Player* target, uint8 newLevel)
     target->SetUInt32Value(PLAYER_XP, 0);
     _syncing = false;
 
-    ChatHandler(target->GetSession()).PSendSysMessage(LANG_LEVELSYNC_LEVEL_UPDATED, newLevel);
+    ChatHandler(target->GetSession()).PSendModuleSysMessage("mod-levelsync", LANG_LEVELSYNC_LEVEL_UPDATED, newLevel);
 }
 
 void LevelSyncMgr::BatchUpdateOfflineLevel(const std::vector<uint32>& guids, uint8 newLevel, uint8 minCurrentLevel)
@@ -664,7 +661,7 @@ void LevelSyncMgr::ApplyIPTierToOnline(Player* target, uint8 newTier)
 
     _syncingIP = false;
 
-    ChatHandler(target->GetSession()).PSendSysMessage(LANG_LEVELSYNC_IP_UPDATED, newTier);
+    ChatHandler(target->GetSession()).PSendModuleSysMessage("mod-levelsync", LANG_LEVELSYNC_IP_UPDATED, newTier);
 }
 
 void LevelSyncMgr::BatchUpdateOfflineIPTier(const std::vector<uint32>& guids, uint8 newTier, uint8 minTier)
@@ -1026,7 +1023,7 @@ LevelSyncMgr::PoolResult LevelSyncMgr::PoolGroupMoney(Player* caller, uint32 gro
         actualDrained += amt;
         ++out.contributors;
 
-        ChatHandler(p->GetSession()).PSendSysMessage(LANG_LEVELSYNC_MONEY_POOLED, caller->GetName().c_str(), FormatMoneyString(amt).c_str());
+        ChatHandler(p->GetSession()).PSendModuleSysMessage("mod-levelsync", LANG_LEVELSYNC_MONEY_POOLED, caller->GetName(), FormatMoneyString(amt));
     }
 
     // Drain offline members. Read-then-zero is two queries rather than a
